@@ -10,3 +10,7 @@ INSERT INTO producto (id, nombre,precio,id_fabricante) VALUES (3,'Discoduro SSD'
 INSERT INTO producto (id, nombre,precio,id_fabricante) VALUES (4,'monitor 24 LED',186.99,2);
 INSERT INTO producto (id, nombre,precio,id_fabricante) VALUES (5,'monitor 32 LED',286.99,2);
 INSERT INTO producto (id, nombre,precio,id_fabricante) VALUES (6,'Celular blue',300.24,3);
+
+
+
+INSERT INTO user_info (id,username,password,role) VALUES (1,'maxi','$2a$12$qfogiGdplO.H8jvw2.xunOOJRCexwWtC6ZzXZcuX4GW19uKnBtM5y','dev');
