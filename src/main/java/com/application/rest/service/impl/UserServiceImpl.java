@@ -4,7 +4,6 @@ package com.application.rest.service.impl;
 
 import com.application.rest.entities.UserInfo;
 import com.application.rest.repository.UserRepository;
-import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
