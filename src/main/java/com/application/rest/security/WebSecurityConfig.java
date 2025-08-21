@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( req ->
                 req.requestMatchers("/api/product/**").permitAll()
-                        .requestMatchers("/api/maker/findAll").hasRole("admin")
+                        .requestMatchers("/api/maker/findAll").hasRole("dev")
                         .anyRequest().authenticated()
 
                 )
