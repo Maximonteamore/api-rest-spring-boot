@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.nio.channels.DatagramChannel;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
-    @Value("{security.jwt.key.private}")
+    @Value("${security.jwt.key.private}")
     private String privateKey;
 
-    @Value("{security.jwt.user.generator}")
+    @Value("${security.jwt.user.generator}")
     private String userGenerator;
 
 
@@ -35,7 +35,8 @@ public class JwtUtils {
         String username = authentication.getPrincipal().toString();//obtengo el nombre del usuario authenticado.
 
         //convierto en string el GrantedAuthority y lo separo por coma con joining por que las autorizaciones podrian ser (read,write,create,etc)
-        String authorities = authentication.getAuthorities().stream()
+        String authorities = authentication.getAuthorities()
+                .stream()
                 .map(GrantedAuthority::getAuthority)//obtengo el permiso lo devuelvo como string
                 .collect(Collectors.joining(","));//obtengo los permiso y lo separo por coma.
 
@@ -75,7 +76,7 @@ public class JwtUtils {
 
     //devuelvo el usuario que esta dentro del token.
     public String extractUsername(DecodedJWT decodedJWT){
-        return  decodedJWT.getSubject().toString();
+        return decodedJWT.getSubject();//iba.tostring
     }
 
     //obtengo el claim "nombre" y o retorno,obtengo del payload,recibo token decodificado y el nombre.

@@ -2,15 +2,18 @@ package com.application.rest.service.impl;
 
 
 
+import com.application.rest.controllers.dto.AuthCreateUser;
 import com.application.rest.controllers.dto.AuthLoginRequest;
 import com.application.rest.controllers.dto.AuthResponse;
 import com.application.rest.entities.UserInfo;
 import com.application.rest.repository.UserRepository;
 import com.application.rest.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,16 +22,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
+
 @Service
 
 //UserDetailsService interface de security para manejar usuarios
 public class UserServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private  UserRepository userRepository;
 
+    @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override //metodo para spring busque a los usuarios resgistrado en la BD
@@ -80,5 +89,27 @@ public class UserServiceImpl implements UserDetailsService {
         return new UsernamePasswordAuthenticationToken(username,userDetails.getPassword(),userDetails.getAuthorities());
     }
 
+    public AuthResponse createUser(AuthCreateUser authCreateUser){
+        String username = authCreateUser.username();
+        String password = authCreateUser.password();
+        String role = authCreateUser.role();
+
+        UserInfo userInfo =  UserInfo.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .role(role)
+                .build();
+
+       UserInfo userCreated = userRepository.save(userInfo);//guardo usuario
+
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();//lista de permisos que tiene el user para generar el token.
+        authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role)));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userCreated.getUsername(),userCreated.getPassword(),authorityList);
+
+            String accessToken = jwtUtils.createToken(authentication);
+            AuthResponse authResponse = new AuthResponse(userCreated.getUsername(),"User created successfully",accessToken,true);
+
+       return  authResponse;
+    }
 
 }

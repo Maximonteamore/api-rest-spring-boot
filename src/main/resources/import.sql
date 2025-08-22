@@ -13,4 +13,5 @@ INSERT INTO producto (id, nombre,precio,id_fabricante) VALUES (6,'Celular blue',
 
 
 
-INSERT INTO user_info (id,username,password,role) VALUES (1,'maxi','03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4','dev');
+INSERT INTO user_info (id,username,password,role) VALUES (1,'maxi','$2a$10$PKjxydmUFIdVUa9FdgclO.n7SMgFb07vFKBlLLF1zhCVZ2jP3gPf2','dev');
+INSERT INTO user_info (id,username,password,role) VALUES (2,'safira','$2a$10$PKjxydmUFIdVUa9FdgclO.n7SMgFb07vFKBlLLF1zhCVZ2jP3gPf2','admin');
