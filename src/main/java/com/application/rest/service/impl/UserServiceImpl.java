@@ -8,7 +8,6 @@ import com.application.rest.controllers.dto.AuthResponse;
 import com.application.rest.entities.UserInfo;
 import com.application.rest.repository.UserRepository;
 import com.application.rest.util.JwtUtils;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

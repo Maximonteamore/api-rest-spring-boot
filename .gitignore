@@ -4,6 +4,13 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Archivos sensibles de configuración ###
+# Ignora el archivo real con datos privados
+src/main/resources/application.properties
+
+# no ignora el archivo de ejemplo
+!src/main/resources/application-example.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,3 +38,4 @@ build/
 
 ### VS Code ###
 .vscode/
+
