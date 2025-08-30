@@ -51,5 +51,28 @@ Después del login, usá el token recibido en los headers:
 ## 🔧 Configuración del proyecto
 
 ### 1. Crear archivo de configuración real y pone los datos necesaarios para conexion a la BD.
+    2. Copiá ese archivo y renombralo como `application.properties`
+    3. Conexión a la base de datos
+        spring.datasource.url=jdbc:mysql://localhost:3306/api_rest
+        spring.datasource.username=TU_USUARIO
+        spring.datasource.password=TU_CONTRASEÑA
+        
+        # Configuración de Hibernate
+        spring.jpa.hibernate.ddl-auto=create
+        spring.jpa.show-sql=true
+        spring.jpa.properties.hibernate.format_sql=true
+        
+        # Clave secreta para firmar tokens JWT
+        security.jwt.key.private=TU_CLAVE_SECRETA
+        
+        # Identificador del emisor del token
+        security.jwt.user.generator=TU_EMISOR
 
-Este proyecto incluye un archivo de ejemplo `application-example.properties` con la configuración necesaria. Para ejecutar el proyecto:
+### 2. Ejecutar
+        mvn spring-boot:run
+
+
+
+
+
+pplication-example.properties` con la configuración necesaria. Para ejecutar el proyecto:
