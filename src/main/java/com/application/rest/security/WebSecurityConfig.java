@@ -35,7 +35,11 @@ public class WebSecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( req ->
-                req.requestMatchers("/api/product/**","/auth/**").permitAll()
+                req.requestMatchers(   "/api/product/**",
+                                "/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**").permitAll()
                         .requestMatchers("/api/maker/findAll").hasRole("dev")
                         .anyRequest().authenticated()
 
