@@ -3,6 +3,9 @@ package com.application.rest.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +23,9 @@ public class UserInfo {
     @Column(nullable = false,length = 100)
     private String password;
 
-    @Column(nullable = false,length = 10)
-    private String role;
+    //@Column(nullable = false,length = 10)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)//con EAGER le digo que carge todos los roles,cascade le digo que si guardo un usuario guarde los roles asociados.
+    @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roles = new HashSet<>();
 
 }

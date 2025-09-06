@@ -54,7 +54,7 @@ public class JwtUtils {
         return jwtToken;
     }
 
-    //devuelvo le metodo decodificado con decodedjwt recibe un token.
+    //devuelvo el metodo decodificado con decodedjwt recibe un token.
     public DecodedJWT validateToken(String token) {
         try {
             //encriptacion
