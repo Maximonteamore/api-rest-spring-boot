@@ -22,7 +22,7 @@ import org.springframework.jmx.export.naming.IdentityNamingStrategy;
                 version = "1.0.0",
                 contact = @Contact(
                         name = "maxi",
-                        url = "www.miapp.com/contac",
+                        url = "www.miapp.com/contact",
                         email = "maxi@gamil.com"
                 ),
                 license = @License(

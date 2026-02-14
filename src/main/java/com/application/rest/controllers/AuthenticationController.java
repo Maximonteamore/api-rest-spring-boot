@@ -20,38 +20,82 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Authentication", description = "Controller for Authentication")
+@Tag(name = "Authentication", description = "Controller for Authentication and JWT token generation")//@tag para la documentacion de swagger.
 public class AuthenticationController {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    //REGISTER
     @PostMapping("/sign-up")
+    @Operation(
+            summary = "Register new user",
+            description = "Creates a new user account and returns authentication information",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "User registration data",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AuthCreateUserRequest.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "User registered successfully",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AuthResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input data",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "User already exists",
+                            content = @Content
+                    )
+            }
+    )
+
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthCreateUserRequest authCreateUser) throws IllegalAccessException {
         return new ResponseEntity<>(this.userServiceImpl.createUser(authCreateUser),HttpStatus.CREATED);
     }
 
+    //LOGIN
     @PostMapping("/log-in")
     @Operation(
-            summary = "Login User",
-            description = "Authenticate a user and return the authentication token along with user details.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody( //body del parametro de la funcion login
+            summary = "Login user",
+            description = "Authenticates a user and returns a JWT token along with user details",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Authentication request with username and password",
-                    required = true,//indica que el parametro es obligatorio
+                    required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema( implementation = AuthLoginRequest.class)//hace referencia al objeto dto que se recibe en el parametro.
+                            schema = @Schema(implementation = AuthLoginRequest.class)
                     )
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful authentication",
-                            content = @Content( //contenido de la respuesta de metodo.
+                            content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema( implementation = AuthResponse.class)//hace referencia al objeto dto que se recibe en el parametro.
+                                    schema = @Schema(implementation = AuthResponse.class)
                             )
-
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Invalid credentials",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid request body",
+                            content = @Content
                     )
             }
     )

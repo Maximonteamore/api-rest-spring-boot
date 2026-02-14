@@ -43,7 +43,7 @@ public class WebSecurityConfig {
                                 "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/maker/save").hasAnyRole("DEV","ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/maker/findAll").hasAnyAuthority("READ")
-                        .requestMatchers(HttpMethod.PUT,"/api/maker/update/{id}").hasAnyAuthority("REFACTOR")
+                        .requestMatchers(HttpMethod.PUT,"/api/maker/update/{id}").hasAnyAuthority("WRITE")
                         .anyRequest().authenticated()
 
                 )

@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserDetailsService {
 
     }
 
+    //metodo para aunteticarse
     public Authentication authenticate(String username, String password){
         UserDetails userDetails = this.loadUserByUsername(username);
 
@@ -106,12 +107,16 @@ public class UserServiceImpl implements UserDetailsService {
         return new UsernamePasswordAuthenticationToken(username,userDetails.getPassword(),userDetails.getAuthorities());
     }
 
+    //metodo para crear un usuario y guardar en la bd.
     public AuthResponse createUser(AuthCreateUserRequest authCreateUserRequest) throws IllegalAccessException {
+
+        //obtengo usuario, contraseña y la lista de roles.
         String username = authCreateUserRequest.username();
         String password = authCreateUserRequest.password();
         List<String> roleRequest = authCreateUserRequest.roleRequest().roleListName();
 
         //guardo en roleEntitySet los roles que coinsidan con las busqueda en la llamada al metodo findRoleEntitiesByRoleEnumIn que trae una lista de roles de la bd.
+        //es para tener un control de que cuando creen un usuario los roles sean igual a los que existen en la bd si mandan un rol inexistente no se guardara en este set.
         Set<RoleEntity> roleEntitySet = roleRepository.findRoleEntitiesByRoleEnumIn(roleRequest).stream().collect(Collectors.toSet());
 
         //controlo que los roles o rol existan para poder crear el usuario si no existe lanzo error
@@ -119,28 +124,33 @@ public class UserServiceImpl implements UserDetailsService {
             throw new IllegalAccessException("Los roles especificados no existen.");
         }
 
+        //creo el usuario y encripto el pw
         UserInfo userInfo =  UserInfo.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .roles(roleEntitySet)
                 .build();
-
-       UserInfo userCreated = userRepository.save(userInfo);//guardo usuario
+       //guardo usuario en la bd y obtengo el usuario para generar el token.
+       UserInfo userCreated = userRepository.save(userInfo);
 
         //agrego los roles y permiso a las lista.
         ArrayList<SimpleGrantedAuthority> authorityList = new ArrayList<>();//lista de permisos que tiene el user para generar el token.
 
         //agrego los roles en authorityList.
-        userCreated.getRoles().forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name()))));
+        userCreated.getRoles().forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name())))); //siempre poner el gui bajo _ ROLE_.
 
+        //agregi los perimos a la lista  authorityList.
         userCreated.getRoles().stream()
                 .flatMap(role -> role.getPermissionList().stream())
                 .forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getName())));
 
-
+        //creo el objeto de autenticacion.
         Authentication authentication = new UsernamePasswordAuthenticationToken(userCreated.getUsername(),userCreated.getPassword(),authorityList);
 
+            //genero el token le envio el objeto de autenticacion authentication.
             String accessToken = jwtUtils.createToken(authentication);
+
+            //la respuestas contiene el nombre de usuario el mensaje y el token y el status.
             AuthResponse authResponse = new AuthResponse(userCreated.getUsername(),"User created successfully",accessToken,true);
 
        return  authResponse;
