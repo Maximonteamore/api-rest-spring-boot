@@ -33,9 +33,19 @@ public class DataProvider {
 
     }
 
-    public static List<String> listar_rango_preciosTestMock(){
-
-        return List.of("as");
+    //maker
+    public static List<Maker> makerListMock(){
+        return List.of(
+                Maker.builder().id(1L).name("xiaomi").build(),
+                Maker.builder().id(2L).name("lenovo").build()
+        );
     }
+
+    public static Optional<Maker> makerFindById(){
+        return Optional.of(
+                Maker.builder().id(1L).name("xiaomi").build()
+        );
+    }
+
 
 }
